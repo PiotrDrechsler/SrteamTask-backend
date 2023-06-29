@@ -8,7 +8,7 @@ const {
   createStreamer,
   removeStreamer,
   updateStreamerCounter
-} = require('../controllers/streamers')
+} = require('../services/streamers')
 const { streamerValidationSchema } = require('../models/streamer')
 
 const router = express.Router()

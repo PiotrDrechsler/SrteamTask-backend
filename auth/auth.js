@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { getUserById } = require('../controllers/users')
+const { getUserById } = require('../services/users')
 const jwtSecret = process.env.JWT_SECRET
 
 const auth = async (req, res, next) => {
