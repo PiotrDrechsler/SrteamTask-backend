@@ -4,6 +4,7 @@ const { auth } = require('../auth/auth')
 const {
   listStreamers,
   getStreamerById,
+  getStreamerByName,
   createStreamer,
   removeStreamer,
   updateStreamer,
@@ -15,8 +16,8 @@ const router = express.Router()
 
 router.get('/', auth, async (req, res) => {
   try {
-    const contacts = await listStreamers()
-    res.status(200).json(contacts)
+    const streamers = await listStreamers()
+    res.status(200).json(streamers)
   } catch {
     return res.status(500).send('Something went wrong')
   }
@@ -29,6 +30,12 @@ router.post('/', auth, async (req, res) => {
   }
   try {
     const { name, description, platform } = req.body
+
+    const existingStreamer = await getStreamerByName(name)
+    if (existingStreamer) {
+      return res.status(400).send('Given name already exists in the database. Try another one.')
+    }
+
     const streamer = await createStreamer(name, description, platform)
     return res.status(200).json(streamer)
   } catch (err) {

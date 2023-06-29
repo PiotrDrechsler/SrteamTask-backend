@@ -24,6 +24,11 @@ const getStreamerById = async _id => {
   return streamer
 }
 
+const getStreamerByName = async name => {
+  const streamer = await Streamer.findOne({ name })
+  return streamer
+}
+
 const removeStreamer = async _id => {
   try {
     return Streamer.findByIdAndDelete({ _id })
@@ -48,6 +53,7 @@ const updateStatusStreamer = async (_id, platform) => {
 module.exports = {
   listStreamers,
   getStreamerById,
+  getStreamerByName,
   removeStreamer,
   createStreamer,
   updateStreamer,
