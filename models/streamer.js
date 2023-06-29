@@ -37,7 +37,9 @@ const streamerValidationSchema = Joi.object({
   name: Joi.string().min(2).max(50).required(),
   description: Joi.string().required(),
   imageURL: Joi.string(),
-  platform: Joi.string().required(),
+  platform: Joi.string()
+    .valid('Twitch', 'YouTube', 'TikTok', 'Kick', 'Rumble')
+    .required(),
   upvotes: Joi.number().integer().min(0),
   downvotes: Joi.number().integer().min(0)
 })
