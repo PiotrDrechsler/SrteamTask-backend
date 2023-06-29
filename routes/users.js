@@ -17,6 +17,4 @@ router.get('/logout', auth, userController.logout)
 
 router.get('/current', auth, userController.current)
 
-router.patch('/avatars', auth, userController.update)
-
 module.exports = router

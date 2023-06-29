@@ -1,8 +1,3 @@
-const multer = require('multer')
-const path = require('path')
-const fs = require('fs/promises')
-const Jimp = require('jimp')
-
 const loginHandler = require('../auth/loginHandler')
 const { userValidationSchema } = require('../models/user')
 const {
@@ -10,24 +5,9 @@ const {
   getUserById,
   getUserByEmail,
   updateUserToken,
-  updateUserAvatar,
   verifyUser,
   sendUserVerificationEmail
 } = require('../services/users')
-
-const storeImage = path.join(process.cwd(), 'tmp')
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, storeImage)
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname)
-  },
-  limits: 1048576
-})
-
-const upload = multer({ storage })
 
 const signup = async (req, res) => {
   const { error } = userValidationSchema.validate(req.body)
@@ -135,48 +115,11 @@ const current = async (req, res, next) => {
   }
 }
 
-const update = async (req, res, next) => {
-  try {
-    const { email } = req.user
-    const { path: temporaryName, originalname } = req.file
-    const timestamp = Date.now()
-    const datestamp = new Date(timestamp).toISOString().slice(0, 10)
-    const fileName = path.join(
-      storeImage,
-`${email}-${datestamp}-${timestamp}-${originalname}`
-    )
-    await fs.rename(temporaryName, fileName)
-    const img = await Jimp.read(fileName)
-    await img.autocrop().cover(250, 250).quality(60).writeAsync(fileName)
-    const avatarURL = path.join(
-      process.cwd(),
-      'public/avatars',
-      `${email}-${datestamp}-${timestamp}-${originalname}`
-    )
-    const cleanAvatarURL = avatarURL.replace(/\\/g, '/')
-    const user = await updateUserAvatar(email, cleanAvatarURL)
-    await fs.rename(
-      fileName,
-      path.join(
-        process.cwd(),
-        'public/avatars',
-        `${email}-${datestamp}-${timestamp}-${originalname}`
-      )
-    )
-    res.status(200).json(user)
-  } catch (error) {
-    next(error)
-    return res.status(500).json({ message: 'Server error' })
-  }
-}
-
 module.exports = {
   signup,
   verify,
   login,
   logout,
   current,
-  update,
   send
-
 }

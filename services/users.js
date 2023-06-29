@@ -48,15 +48,6 @@ const updateUserToken = async (_id) => {
   return User.findOneAndUpdate(_id, { token: null })
 }
 
-const updateUserAvatar = async (email, avatarURL) => {
-  const user = await User.findOneAndUpdate(
-    { email },
-    { avatarURL },
-    { new: true }
-  )
-  return user
-}
-
 const verifyUser = async (verificationToken) => {
   const user = await User.findOneAndUpdate(
     { verificationToken },
@@ -104,7 +95,6 @@ module.exports = {
   addUserToken,
   updateUserToken,
   getUserByEmail,
-  updateUserAvatar,
   verifyUser,
   sendUserVerificationEmail
 }
