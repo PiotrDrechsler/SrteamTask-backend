@@ -14,12 +14,7 @@ const user = new Schema({
     required: [true, 'Email is required'],
     unique: true
   },
-
   token: {
-    type: String,
-    default: null
-  },
-  avatarURL: {
     type: String,
     default: null
   },
@@ -45,8 +40,7 @@ const userValidationSchema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().email().required(),
   subscription: Joi.string(),
-  token: Joi.string(),
-  avatarURL: Joi.string()
+  token: Joi.string()
 })
 
 module.exports = { User, userValidationSchema, hashPassword }

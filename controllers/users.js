@@ -1,18 +1,14 @@
 const { User, hashPassword } = require('../models/user')
-const gravatar = require('gravatar')
 const nodemailer = require('nodemailer')
 const { v4: uuidv4 } = require('uuid')
 
-const createUser = async (password, email, subscription, avatarURL, token) => {
+const createUser = async (password, email, token) => {
   try {
     const hashedPassword = hashPassword(password)
-    const createAvatar = gravatar.url(email, { d: 'robohash', s: '250' })
 
     const user = new User({
       password: hashedPassword,
       email,
-      subscription,
-      avatarURL: createAvatar,
       verify: false,
       verificationToken: uuidv4(),
       token

@@ -1,10 +1,10 @@
 const express = require('express')
-const contactRouter = require('./contacts')
+const contactRouter = require('./streamers')
 const usersRouter = require('./users')
 
 const router = express.Router()
 
-router.use('/api/contacts', contactRouter)
+router.use('/api/streamers', contactRouter)
 router.use('/api/users', usersRouter)
 
 module.exports = router
