@@ -7,8 +7,7 @@ const {
   getStreamerByName,
   createStreamer,
   removeStreamer,
-  updateStreamer,
-  updateStatusStreamer
+  updateStreamerCounter
 } = require('../controllers/streamers')
 const { streamerValidationSchema } = require('../models/streamer')
 
@@ -50,63 +49,46 @@ router.get('/:id', auth, async (req, res) => {
     if (id.length !== 24) {
       return res.status(400).send('Wrong id provided')
     }
-    const contact = await getStreamerById(id)
-    if (!contact) {
-      return res.status(404).send('Contact not found')
+    const streamer = await getStreamerById(id)
+    if (!streamer) {
+      return res.status(404).send('Streamer not found')
     }
-    res.status(200).json(contact)
+    res.status(200).json(streamer)
   } catch {
     return res.status(500).send('Something went wrong')
   }
 })
 
 router.delete('/:id', auth, async (req, res) => {
-  const contactId = req.params.id
+  const { id } = req.params
   try {
-    const removed = await removeStreamer(contactId)
+    const removed = await removeStreamer(id)
     if (removed) {
-      return res.status(200).send('Contact deleted')
+      return res.status(200).send('Streamer deleted')
     } else {
-      return res.status(404).send('Contact not found')
+      return res.status(404).send('Streamer not found')
     }
   } catch (err) {
     return res.status(500).send('Something went wrong')
   }
 })
 
-router.put('/:id', auth, async (req, res) => {
-  const { id } = req.params
-  if (!id) {
-    return res.status(400).send('Id is required to perform update')
-  }
-  const { error } = streamerValidationSchema.validate(req.body)
-  if (error) {
-    return res.status(400).send(error.details[0].message)
-  }
-  const contact = getStreamerById(id)
-  if (!contact) {
-    return res.status(404).send('Contact not found')
-  }
+router.put('/:id/vote', auth, async (req, res) => {
   try {
-    updateStreamer(id, req.body)
-    return res.status(200).send('Contact sucessfully updated!')
-  } catch {
-    return res.status(500).send('Something went wrong!')
-  }
-})
-
-router.patch('/:contactId/favorite', auth, async (req, res) => {
-  try {
-    const { contactId: _id } = req.params
-    const { favorite } = req.body
-    if (favorite === undefined) {
-      return res.status(400).send('Missing field favorite')
+    const { id } = req.params
+    if (id.length !== 24) {
+      return res.status(400).send('Wrong ID provided')
     }
-    const favoriteValue = Boolean(favorite)
-    const updatedContact = await updateStatusStreamer(_id, favoriteValue)
-    return res.status(200).send(updatedContact)
-  } catch (err) {
-    return res.status(404).send('Contact not found')
+    const streamer = await getStreamerById(id)
+    if (!streamer) {
+      return res.status(404).send('Streamer not found')
+    }
+    await updateStreamerCounter(id)
+    const updatedStreamer = await getStreamerById(id)
+    res.status(200).json(updatedStreamer)
+  } catch (error) {
+    console.error(error)
+    return res.status(500).send('Something went wrong')
   }
 })
 

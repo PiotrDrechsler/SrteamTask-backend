@@ -37,25 +37,21 @@ const removeStreamer = async _id => {
   }
 }
 
-const updateStreamer = async (_id, newContact) => {
-  const updatedStreamer = await Streamer.findByIdAndUpdate(_id, newContact)
-  return updatedStreamer
-}
+const updateStreamerCounter = async _id => {
+  const updatedStreamer = await Streamer.findByIdAndUpdate(
+    _id,
+    { $inc: { counter: 1 } },
+    { new: true }
+  )
 
-const updateStatusStreamer = async (_id, platform) => {
-  const update = { platform }
-  const updatedStreamer = await Streamer.findByIdAndUpdate(_id, update, {
-    new: true
-  })
   return updatedStreamer
 }
 
 module.exports = {
   listStreamers,
+  createStreamer,
   getStreamerById,
   getStreamerByName,
   removeStreamer,
-  createStreamer,
-  updateStreamer,
-  updateStatusStreamer
+  updateStreamerCounter
 }
