@@ -15,12 +15,12 @@ const signup = async (req, res) => {
     return res.status(400).send(error.details[0].message)
   }
   try {
-    const { password, email, subscription } = req.body
+    const { password, email } = req.body
     const isEmailOccupied = await getUserByEmail(email)
     if (isEmailOccupied) {
       return res.status(409).send(`Email ${email} is already in use!`)
     }
-    const user = await createUser(password, email, subscription)
+    const user = await createUser(password, email)
     return res.status(201).json(user)
   } catch (err) {
     return res.status(500).send('Something went wrong POST!')

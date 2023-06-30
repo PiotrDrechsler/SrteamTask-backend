@@ -2,6 +2,10 @@ const { User, hashPassword } = require('../models/user')
 const nodemailer = require('nodemailer')
 const { v4: uuidv4 } = require('uuid')
 
+const serviceSecret = process.env.MAIL_SERVICE_SECRET
+const userSecret = process.env.MAIL_USER_SECRET
+const passSecret = process.env.MAIL_PASS_SECRET
+
 const createUser = async (password, email, token) => {
   try {
     const hashedPassword = hashPassword(password)
@@ -60,20 +64,20 @@ const verifyUser = async (verificationToken) => {
 const sendUserVerificationEmail = async (email, verificationToken) => {
   try {
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: serviceSecret,
       auth: {
-        user: 'pdrech@gmail.com',
-        pass: 'nsskwzxcxdfzgkov'
+        user: userSecret,
+        pass: passSecret
       }
     })
 
     const html = `
       <div>
-      <h1>Hello There!</h1>
+        <h1>Hello There!</h1>
         <p>Please click <a href="http://localhost:3030/api/users/verify/${verificationToken}">here</a> to verify your account.</p>
         <p>Thank you for your support!</p>
       </div>
-    `;
+    `
 
     const info = await transporter.sendMail({
       from: { name: 'Piotr', address: 'example@example.com' },
@@ -81,6 +85,10 @@ const sendUserVerificationEmail = async (email, verificationToken) => {
       subject: 'Stream Task - Verify your account',
       html
     })
+
+    if (info.rejected.length > 0) {
+      throw new Error('Email does not exist')
+    }
 
     const previewUrl = nodemailer.getTestMessageUrl(info)
     console.log(previewUrl)
