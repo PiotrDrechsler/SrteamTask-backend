@@ -1,5 +1,5 @@
 const loginHandler = require('../auth/loginHandler')
-const { userValidationSchema } = require('../models/user')
+const { userValidationSchema } = require('../models/User')
 const {
   createUser,
   getUserById,

@@ -1,4 +1,4 @@
-const { User, hashPassword } = require('../models/user')
+const { User, hashPassword } = require('../models/User')
 const nodemailer = require('nodemailer')
 const { v4: uuidv4 } = require('uuid')
 

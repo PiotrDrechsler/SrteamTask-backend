@@ -6,7 +6,7 @@ const {
   removeStreamer,
   updateStreamerCounter
 } = require('../services/streamers')
-const { streamerValidationSchema } = require('../models/streamer')
+const { streamerValidationSchema } = require('../models/Streamer')
 
 const list = async (req, res) => {
   try {

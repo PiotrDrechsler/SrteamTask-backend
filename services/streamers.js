@@ -1,6 +1,6 @@
 const gravatar = require('gravatar')
 
-const { Streamer } = require('../models/streamer.js')
+const { Streamer } = require('../models/Streamer.js')
 
 const listStreamers = async () => {
   const streamers = await Streamer.find()

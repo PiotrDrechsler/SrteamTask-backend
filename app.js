@@ -25,7 +25,13 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-  res.status(500).send(err.message)
+  const status = err.status || 500
+  const message = err.message || 'Something went wrong!'
+  return res.status(status).json({
+    sucess: false,
+    status,
+    message
+  })
 })
 
 module.exports = app
