@@ -69,14 +69,16 @@ const sendUserVerificationEmail = async (email, verificationToken) => {
 
     const html = `
       <div>
-        <p>Click <a href="http://localhost:3030/api/users/verify/${verificationToken}">here</a> to verify your account</p>
+      <h1>Hello There!</h1>
+        <p>Please click <a href="http://localhost:3030/api/users/verify/${verificationToken}">here</a> to verify your account.</p>
+        <p>Thank you for your support!</p>
       </div>
-    `
+    `;
 
     const info = await transporter.sendMail({
       from: { name: 'Piotr', address: 'example@example.com' },
       to: email,
-      subject: 'Verify your account',
+      subject: 'Stream Task - Verify your account',
       html
     })
 
