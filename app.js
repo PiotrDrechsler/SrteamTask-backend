@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv')
 
 dotenv.config()
@@ -14,6 +15,7 @@ const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
+app.use(cookieParser())
 app.use(express.json())
 app.use(morgan(formatsLogger))
 app.use(router)

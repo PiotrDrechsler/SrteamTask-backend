@@ -80,7 +80,7 @@ const login = async (req, res) => {
       )
   }
   try {
-    const token = await loginHandler(email, password)
+    const token = await loginHandler(res, email, password)
     return res.status(200).send(token)
   } catch (err) {
     return res.status(401).send('Email or password is wrong')
@@ -95,6 +95,7 @@ const logout = async (req, res) => {
       return res.status(401).send('Not authorized')
     }
     await updateUserToken(_id)
+    res.cookie(null)
     res.sendStatus(204)
   } catch (err) {
     console.error(err)
