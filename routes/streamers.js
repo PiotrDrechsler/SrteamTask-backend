@@ -6,11 +6,11 @@ const streamerController = require('../controllers/streamers')
 
 const router = express.Router()
 
-router.get('/', auth, streamerController.list)
+router.get('/', streamerController.list)
 
 router.post('/', auth, streamerController.create)
 
-router.get('/:id', auth, streamerController.getById)
+router.get('/:id', streamerController.getById)
 
 router.delete('/:id', auth, streamerController.remove)
 
