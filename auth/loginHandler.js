@@ -16,7 +16,7 @@ const loginHandler = async (res, email, incomingPassword) => {
   const result = bcrypt.compareSync(incomingPassword, userPassword)
   if (result) {
     const token = issueToken(user)
-    res.cookie('token', token, cookieParams)
+    res.cookie('access_token', token, cookieParams)
     await addUserToken(user._id, token)
     return token
   } else {
