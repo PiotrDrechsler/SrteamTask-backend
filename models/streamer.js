@@ -21,9 +21,13 @@ const streamer = new Schema({
     enum: ['Twitch', 'YouTube', 'TikTok', 'Kick', 'Rumble'],
     required: true
   },
-  counter: {
-    type: Number,
-    default: 0
+  upvotes: {
+    type: [String],
+    default: []
+  },
+  downvotes: {
+    type: [String],
+    default: []
   }
 })
 
@@ -36,8 +40,8 @@ const streamerValidationSchema = Joi.object({
   platform: Joi.string()
     .valid('Twitch', 'YouTube', 'TikTok', 'Kick', 'Rumble')
     .required(),
-  counter: Joi.number().integer().min(0)
-
+  upvotes: Joi.number().integer().min(0),
+  downvotes: Joi.number().integer().min(0)
 })
 
 module.exports = { Streamer, streamerValidationSchema }
